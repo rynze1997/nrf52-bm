@@ -12,9 +12,16 @@ SECTIONS {
         *(.rodata*)
     } > FLASH
 
+    .data : {
+        *(.data*)
+    } > RAM
+    ASSERT(SIZEOF(.data) == 0, "startup does not copy .data; keep statics zero-init")
+
     .bss (NOLOAD) : {
+        _sbss = .;
         *(.bss*)
         *(COMMON)
+        _ebss = .;
     } > RAM
 }
 
